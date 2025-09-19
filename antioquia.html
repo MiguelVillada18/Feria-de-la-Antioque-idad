@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Pintada, Antioquia - Fiesta de la Antioqueñidad</title>
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== Variables y estilos generales ===== */
+        :root {
+            --color-primary: #1e8449;
+            --color-secondary: #f39c12;
+            --color-accent: #2c3e50;
+            --color-background: #fdfefe;
+            --color-light: #ecf0f1;
+            --color-text: #34495e;
+
+            --font-family-heading: 'Playfair Display', serif;
+            --font-family-body: 'Lora', serif;
+
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-family-body);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        h1, h2, h3 {
+            font-family: var(--font-family-heading);
+            font-weight: 700;
+            color: var(--color-accent);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            position: relative;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--color-secondary);
+            border-radius: 2px;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+        section {
+            padding: 6rem 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        section.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== Navbar ===== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            transition: background-color .4s ease, box-shadow .4s ease;
+        }
+        .navbar.scrolled {
+            background-color: rgba(255,255,255,0.95);
+            box-shadow: var(--shadow-light);
+            backdrop-filter: blur(6px);
+        }
+        .navbar .container {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 1.5rem;
+        }
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        .nav-links { list-style: none; display: flex; }
+        .nav-links a {
+            padding: 0.6rem 1rem;
+            margin-left: .8rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            position: relative;
+        }
+        .nav-links a:hover { color: var(--color-primary); }
+        .nav-links a::after {
+            content: '';
+            position: absolute; bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 2px;
+            background: var(--color-primary);
+            transition: width .3s ease;
+        }
+        .nav-links a:hover::after { width: 100%; }
+
+        .menu-toggle { display: none; font-size: 2rem; cursor: pointer; }
+
+        @media(max-width:768px){
+            .nav-links {
+                position: fixed; top: 0; right: -100%;
+                height: 100vh; width: 70%;
+                background: rgba(255,255,255,0.95);
+                flex-direction: column; justify-content: center; align-items: center;
+                transition: right .5s ease;
+            }
+            .nav-links.active { right: 0; }
+            .nav-links a { font-size: 1.5rem; margin: 1.5rem 0; }
+            .menu-toggle { display: block; color: var(--color-accent); }
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            text-align: center;
+            background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Vista_aerea_de_La_Pintada_Antioquia.jpg/1200px-Vista_aerea_de_La_Pintada_Antioquia.jpg") no-repeat center/cover;
+            background-attachment: fixed;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        .hero-content { position: relative; z-index: 1; color: #fff; }
+        .hero h1 { font-size: clamp(2.5rem,8vw,4.5rem); }
+        .hero p { font-size: clamp(1rem,3vw,1.5rem); margin-top: .5rem; }
+
+        /* ===== Cards ===== */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            transition: transform .3s ease;
+        }
+        .card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+        .card img { width: 100%; height: 220px; object-fit: cover; }
+        .card-content { padding: 1.5rem; }
+        .card h3 { margin-bottom: .5rem; color: var(--color-accent); }
+
+        /* ===== Curiosidades ===== */
+        .curiosidades-grid {
+            display: grid; gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+            text-align: center;
+        }
+        .curiosidad-item {
+            background: #fff;
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-light);
+            transition: transform .3s ease;
+        }
+        .curiosidad-item:hover { transform: translateY(-8px); }
+        .curiosidad-item .icon { font-size: 3rem; margin-bottom: 1rem; color: var(--color-primary); }
+
+        /* ===== Galería ===== */
+        .gallery-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); }
+        .gallery-item { position: relative; overflow: hidden; border-radius: 15px; }
+        .gallery-item img { width: 100%; transition: transform .4s ease; }
+        .gallery-item:hover img { transform: scale(1.1); }
+        .gallery-overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            display:flex; align-items:center; justify-content:center;
+            background:rgba(0,0,0,.5); opacity:0; transition:.4s ease;
+        }
+        .gallery-item:hover .gallery-overlay { opacity:1; }
+        .gallery-title { color:#fff; font-size:1.5rem; font-weight:700; }
+
+        /* ===== Contacto ===== */
+        .contact-form {
+            max-width: 650px; margin: 0 auto;
+            background: #fff; padding: 2rem;
+            border-radius: 15px; box-shadow: var(--shadow-light);
+        }
+        .form-control {
+            width: 100%; padding: 1rem; margin-bottom: 1rem;
+            border: 2px solid #ddd; border-radius: 10px;
+        }
+        .btn {
+            width: 100%; padding: 1rem;
+            background: var(--color-primary); color: #fff;
+            border: none; border-radius: 10px;
+            font-size: 1rem; font-weight: 600;
+            cursor: pointer; transition: .3s ease;
+        }
+        .btn:hover { background: var(--color-secondary); }
+
+        /* ===== Footer ===== */
+        .footer { text-align:center; padding:1.5rem; background:var(--color-light); margin-top:3rem; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="logo">Antioqueñidad</a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#historia">Historia</a></li>
+                <li><a href="#cultura">Cultura</a></li>
+                <li><a href="#gastronomia">Gastronomía</a></li>
+                <li><a href="#curiosidades">Curiosidades</a></li>
+                <li><a href="#lugares">Lugares</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <div class="menu-toggle" id="menu-toggle">&#9776;</div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Fiesta de la Antioqueñidad</h1>
+            <p>Un homenaje a nuestras raíces y tradiciones paisas</p>
+        </div>
+    </header>
+
+    <!-- Historia -->
+    <section id="historia">
+        <div class="container">
+            <h2>Historia</h2>
+            <p>La Fiesta de la Antioqueñidad nace como una celebración del orgullo paisa. Se conmemora la cultura, la tradición y el legado de Antioquia, resaltando valores como la pujanza, la hospitalidad y el amor por nuestras raíces. En La Pintada, esta fiesta reúne a toda la comunidad en torno a la música, la danza, la gastronomía y los símbolos que nos identifican.</p>
+        </div>
+    </section>
+
+    <!-- Cultura -->
+    <section id="cultura">
+        <div class="container">
+            <h2>Cultura</h2>
+            <div class="cards">
+                <div class="card">
+                    <img src="IMAGEN1.jpg" alt="Baile típico">
+                    <div class="card-content">
+                        <h3>Baile y Música</h3>
+                        <p>El bambuco, el pasillo y la trova acompañan cada encuentro, reflejando la alegría de ser paisa.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="IMAGEN2.jpg" alt="Desfile antioqueño">
+                    <div class="card-content">
+                        <h3>Desfiles y Carrozas</h3>
+                        <p>Las calles se llenan de color con comparsas, cabalgatas y representaciones de la vida arriera.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="IMAGEN3.jpg" alt="Tradiciones arrieras">
+                    <div class="card-content">
+                        <h3>Tradición Arriera</h3>
+                        <p>La mulada, el carriel y el sombrero son símbolos de la herencia antioqueña que aún se conserva.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gastronomía -->
+    <section id="gastronomia">
+        <div class="container">
+            <h2>Gastronomía</h2>
+            <div class="cards">
+                <div class="card">
+                    <img src="IMAGEN4.jpg" alt="Bandeja paisa">
+                    <div class="card-content">
+                        <h3>Bandeja Paisa</h3>
+                        <p>Un plato abundante que refleja la riqueza de nuestra tierra y el esfuerzo del pueblo antioqueño.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="IMAGEN5.jpg" alt="Arepa">
+                    <div class="card-content">
+                        <h3>Arepa Antioqueña</h3>
+                        <p>La infaltable compañera de cada comida, símbolo de nuestra mesa y tradición.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="IMAGEN6.jpg" alt="Sancocho">
+                    <div class="card-content">
+                        <h3>Sancocho</h3>
+                        <p>El caldo típico que une a las familias en celebraciones y encuentros comunitarios.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curiosidades -->
+    <section id="curiosidades">
+        <div class="container">
+            <h2>Curiosidades</h2>
+            <div class="curiosidades-grid">
+                <div class="curiosidad-item">
+                    <div class="icon">🎶</div>
+                    <h3>Trova Paisa</h3>
+                    <p>Los trovadores improvisan versos que divierten y enseñan, manteniendo viva la tradición oral.</p>
+                </div>
+                <div class="curiosidad-item">
+                    <div class="icon">🐴</div>
+                    <h3>Cabalgatas</h3>
+                    <p>El caballo criollo ha sido por siglos compañero inseparable de la cultura antioqueña.</p>
+                </div>
+                <div class="curiosidad-item">
+                    <div class="icon">☕</div>
+                    <h3>Café Antioqueño</h3>
+                    <p>El café es más que una bebida: es identidad, trabajo y orgullo de nuestra gente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lugares -->
+    <section id="lugares">
+        <div class="container">
+            <h2>Lugares Emblemáticos</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="IMAGEN7.jpg" alt="Río Cauca">
+                    <div class="gallery-overlay"><span class="gallery-title">Río Cauca</span></div>
+                </div>
+                <div class="gallery-item">
+                    <img src="IMAGEN8.jpg" alt="Parque Principal">
+                    <div class="gallery-overlay"><span class="gallery-title">Parque Principal</span></div>
+                </div>
+                <div class="gallery-item">
+                    <img src="IMAGEN9.jpg" alt="Miradores">
+                    <div class="gallery-overlay"><span class="gallery-title">Miradores</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto">
+        <div class="container">
+            <h2>Contáctanos</h2>
+            <form class="contact-form">
+                <input type="text" class="form-control" placeholder="Tu nombre" required>
+                <input type="email" class="form-control" placeholder="Tu correo electrónico" required>
+                <textarea class="form-control" rows="5" placeholder="Tu mensaje" required></textarea>
+                <button type="submit" class="btn">Enviar Mensaje</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Fiesta de la Antioqueñidad - La Pintada, Antioquia</p>
+    </footer>
+
+    <script>
+        // Navbar scroll
+        const navbar = document.getElementById("navbar");
+        window.addEventListener("scroll", ()=> {
+            navbar.classList.toggle("scrolled", window.scrollY > 50);
+        });
+
+        // Menu toggle
+        const menuToggle = document.getElementById("menu-toggle");
+        const navLinks = document.getElementById("nav-links");
+        menuToggle.addEventListener("click", ()=> navLinks.classList.toggle("active"));
+
+        // Animación al hacer scroll
+        const sections = document.querySelectorAll("section");
+        const observer = new IntersectionObserver(entries=>{
+            entries.forEach(e=>{
+                if(e.isIntersecting){ e.target.classList.add("visible"); }
+            });
+        }, {threshold:0.2});
+        sections.forEach(s=>observer.observe(s));
+    </script>
+</body>
+</html>
